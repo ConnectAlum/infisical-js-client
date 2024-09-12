@@ -15,7 +15,6 @@ export type GetSecretResponse = {
 export const getSecret = (auth: Auth<any>): (query: GetSecretQuery) => Promise<Secret> => {
   return async (query) => {
     const { secretName, ...rest } = query;
-    const data = await sendGet<GetSecretResponse>("/api/v3/secrets/raw", auth, rest);
-    return data.secrets.filter((s) => s.secretKey === secretName)?.[0];
+    return (await sendGet<{ secret: Secret } >(`/api/v3/secrets/raw/${secretName}`, auth, rest)).secret;
   }
 }

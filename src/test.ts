@@ -11,19 +11,19 @@ const foo = async () => {
         }
     });
 
-    // console.log(await infisical.getSecret({
-    //     secretName: "NEXT_PUBLIC_SUPABASE_URL",
-    //     workspaceId: "a1bf48e8-ad0d-473e-94bd-a2796b306937",
-    //     workspaceSlug: "connect-6-gq-m",
-    //     environment: "dev"
-    // }))
-
-    console.log(await infisical.listSecrets({
-        recursive: true,
+    console.log(await infisical.getSecret({
+        secretName: "NEXT_PUBLIC_SUPABASE_URL",
         workspaceId: "a1bf48e8-ad0d-473e-94bd-a2796b306937",
         workspaceSlug: "connect-6-gq-m",
-        environment: "dev",
-    }));
+        environment: "dev"
+    }))
+
+    // console.log(await infisical.listSecrets({
+    //     recursive: true,
+    //     workspaceId: "a1bf48e8-ad0d-473e-94bd-a2796b306937",
+    //     workspaceSlug: "connect-6-gq-m",
+    //     environment: "dev",
+    // }));
 }
 
 foo();

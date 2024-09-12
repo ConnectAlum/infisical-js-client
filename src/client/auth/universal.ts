@@ -17,7 +17,7 @@ export class UniversalAuthImpl implements Auth<UniversalAuth> {
       // check if the token is still valid
       const now = Date.now();
       const expiresAt = this.currentAuth.expiresIn * 1000;
-      if (now < expiresAt) {
+      if (now < expiresAt) { // TODO: make sure it's in milliseconds and not seconds
         return Promise.resolve(this.currentAuth.accessToken);
       }
       // token is expired, refresh it

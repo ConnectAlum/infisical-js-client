@@ -1,0 +1,1 @@
+export { createInfisicalClient } from "@/client";

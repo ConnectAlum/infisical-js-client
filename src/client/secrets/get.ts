@@ -1,4 +1,3 @@
-import { InfisicalClientOptions } from "@/client";
 import { Auth } from "@/client/auth";
 import { Secret, StandardSecretQueryFilters } from "@/client/secrets";
 import { sendGet } from "@/client/util";
@@ -10,11 +9,13 @@ export type GetSecretQuery = StandardSecretQueryFilters & {
   secretName: string;
 };
 export type GetSecretResponse = {
-  secret: Secret;
+  secrets: Secret[];
 }
-export const getSecret = (auth: Auth<any>): (query: GetSecretQuery) => Promise<GetSecretResponse> => {
-  return (query) => {
+
+export const getSecret = (auth: Auth<any>): (query: GetSecretQuery) => Promise<Secret> => {
+  return async (query) => {
     const { secretName, ...rest } = query;
-    return sendGet<GetSecretResponse>("/api/v3/secrets/raw", auth, rest)
+    const data = await sendGet<GetSecretResponse>("/api/v3/secrets/raw", auth, rest);
+    return data.secrets.filter((s) => s.secretKey === secretName)?.[0];
   }
 }

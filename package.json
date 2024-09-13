@@ -1,10 +1,10 @@
 {
   "name": "@connectalum/infisical-js-client",
   "version": "0.0.1",
-  "description": "A lightweith pure typescript client for the Infisical API",
+  "description": "A lightweight pure typescript client for the Infisical API",
   "type": "module",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc && tsc-alias -p tsconfig.json"
   },
   "keywords": [],
   "author": "ConnectAlum INC",
@@ -22,6 +22,7 @@
   "devDependencies": {
     "eslint": "^9.10.0",
     "prettier": "^3.3.3",
+    "tsc-alias": "^1.8.10",
     "typescript": "^5.6.2"
   }
 }

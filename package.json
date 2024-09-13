@@ -1,10 +1,20 @@
 {
   "name": "@connectalum/infisical-js-client",
-  "version": "0.0.1",
+  "version": "0.0.2-dev",
   "description": "A lightweight pure typescript client for the Infisical API",
   "type": "module",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "source": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "scripts": {
-    "build": "tsc && tsc-alias -p tsconfig.json"
+    "build": "tsup"
   },
   "keywords": [],
   "author": "ConnectAlum INC",
@@ -12,8 +22,6 @@
     "type": "git",
     "url": "git+https://github.com/ConnectAlum/infisical-js-client.git"
   },
-  "types": "dist/index.d.ts",
-  "main": "dist/index.js",
   "files": [
     "dist"
   ],
@@ -22,7 +30,7 @@
   "devDependencies": {
     "eslint": "^9.10.0",
     "prettier": "^3.3.3",
-    "tsc-alias": "^1.8.10",
+    "tsup": "^8.2.4",
     "typescript": "^5.6.2"
   }
 }

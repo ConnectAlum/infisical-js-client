@@ -1,8 +1,8 @@
 {
-  "name": "infisical-js-client",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "@connectalum/infisical-js-client",
+  "version": "0.0.1",
+  "description": "A lightweith pure typescript client for the Infisical API",
+  "type": "module",
   "scripts": {
     "build": "tsc"
   },

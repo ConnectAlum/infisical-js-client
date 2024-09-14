@@ -20,6 +20,9 @@ export const sendGet = async <T>(url: string, auth: Auth<any>, query: Record<str
     },
   });
   const json = await response.json();
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${url}: ${response.statusText} - ${JSON.stringify(json)}`);
+  }
   return json as T;
 }
 
@@ -35,5 +38,8 @@ export const sendWithBody = async <T>(url: string, method: BodyMethod, auth: Aut
     body: JSON.stringify(body),
   });
   const json = await response.json();
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${url}: ${response.statusText} - ${JSON.stringify(json)}`);
+  }
   return json as T;
 }

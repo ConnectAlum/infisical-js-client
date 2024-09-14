@@ -1,5 +1,11 @@
 import { Auth } from "@/client/auth";
 
+export class FetchResourceError extends Error {
+  constructor(message: string, public code: number, public json: any) {
+    super(message);
+  }
+}
+
 export const sendGet = async <T>(url: string, auth: Auth<any>, query: Record<string, string | string[] | number | boolean>) => {
   const accessToken = await auth.getAccessToken();
   const normalizedQuery = Object.entries(query).reduce((acc, [key, value]) => {
@@ -21,7 +27,7 @@ export const sendGet = async <T>(url: string, auth: Auth<any>, query: Record<str
   });
   const json = await response.json();
   if (!response.ok) {
-    throw new Error(`Failed to fetch ${url}: ${response.statusText} - ${JSON.stringify(json)}`);
+    throw new FetchResourceError(`Failed to fetch ${url}: ${response.statusText} - ${JSON.stringify(json)}`, response.status, json);
   }
   return json as T;
 }
@@ -39,7 +45,7 @@ export const sendWithBody = async <T>(url: string, method: BodyMethod, auth: Aut
   });
   const json = await response.json();
   if (!response.ok) {
-    throw new Error(`Failed to fetch ${url}: ${response.statusText} - ${JSON.stringify(json)}`);
+    throw new FetchResourceError(`Failed to fetch ${url}: ${response.statusText} - ${JSON.stringify(json)}`, response.status, json);
   }
   return json as T;
 }

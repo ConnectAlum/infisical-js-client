@@ -53,8 +53,6 @@ export class UniversalAuthImpl implements Auth<UniversalAuth> {
       expire: new Date(Date.now() + json.expiresIn * 1000),
       resp: json
     }
-    console.log("Authenticated with universal auth");
-    console.log(json)
     return json.accessToken;
   }
   

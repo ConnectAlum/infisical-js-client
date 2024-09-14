@@ -4,25 +4,25 @@ export type UniversalAuth = { universalAuth: { clientId: string; clientSecret: s
 
 type UniversalAuthResponse = {
   accessToken: string;
-  expiresIn: number;
+  expiresIn: number; // seconds
   accessTokenMaxTTL: number;
   tokenType: "Bearer" | string;
 }
 
 export class UniversalAuthImpl implements Auth<UniversalAuth> {
-  currentAuth: UniversalAuthResponse | null = null;
+  currentAuth: {expire: Date; resp: UniversalAuthResponse} | null = null;
   constructor(public auth: UniversalAuth, public siteUrl: string) { }
   getAccessToken(): Promise<string> {
     if (this.currentAuth) {
+      const { expire, resp } = this.currentAuth;
       // check if the token is still valid
       const now = Date.now();
-      const expiresAt = this.currentAuth.expiresIn * 1000;
-      if (now < expiresAt) { // TODO: make sure it's in milliseconds and not seconds
-        return Promise.resolve(this.currentAuth.accessToken);
+      if (expire.getTime() > now) {
+        return Promise.resolve(resp.accessToken);
       }
       // token is expired, refresh it
       const endpoint = `${this.siteUrl}/api/v1/auth/token/renew`;
-      const body = JSON.stringify({ accessToken: this.currentAuth.accessToken });
+      const body = JSON.stringify({ accessToken: resp.accessToken });
       return fetch(endpoint, {
         method: "POST",
         headers: {
@@ -30,7 +30,10 @@ export class UniversalAuthImpl implements Auth<UniversalAuth> {
         },
         body
       }).then(response => response.json()).then((json: UniversalAuthResponse) => {
-        this.currentAuth = json;
+        this.currentAuth = {
+          expire: new Date(Date.now() + json.expiresIn * 1000),
+          resp
+        }
         return json.accessToken;
       });
     }
@@ -46,7 +49,12 @@ export class UniversalAuthImpl implements Auth<UniversalAuth> {
       body: JSON.stringify(this.auth.universalAuth)
     });
     const json = await response.json() as UniversalAuthResponse;
-    this.currentAuth = json;
+    this.currentAuth = {
+      expire: new Date(Date.now() + json.expiresIn * 1000),
+      resp: json
+    }
+    console.log("Authenticated with universal auth");
+    console.log(json)
     return json.accessToken;
   }
   

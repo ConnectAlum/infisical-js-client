@@ -6,7 +6,7 @@ import { listSecrets } from "@/client/secrets/list";
 
 export type InfisicalClientOptions = {
   siteUrl: string;
-  auth: UniversalAuth | TokenAuth | (() => Promise<string>);
+  auth: UniversalAuth | TokenAuth | Auth<any> | (() => Promise<string>);
 }
 export const createInfisicalClient = (options: InfisicalClientOptions) => {
   // remove the trailing slash from the site URL
@@ -21,6 +21,9 @@ export const createInfisicalClient = (options: InfisicalClientOptions) => {
         auth = new UniversalAuthImpl(options.auth, options.siteUrl);
       } else if ("accessToken" in options.auth) {
         auth = new TokenAuthImpl(options.auth, options.siteUrl);
+      } else if (typeof options.auth === "object") {
+        // you can pass in your own instance of Auth
+        auth = options.auth;
       } else if (typeof options.auth === "function") {
         auth = {
           auth: {},
@@ -28,7 +31,9 @@ export const createInfisicalClient = (options: InfisicalClientOptions) => {
           authenticate: options.auth,
           getAccessToken: options.auth
         }
-      } else throw new Error("Invalid auth option");
+      } else {
+        throw new Error("Invalid auth object");
+      }
     }
     return auth;
   }
@@ -38,3 +43,5 @@ export const createInfisicalClient = (options: InfisicalClientOptions) => {
     getSecret: getSecret(getAuthImpl())
   }
 }
+
+export { Auth } from "@/client/auth";
